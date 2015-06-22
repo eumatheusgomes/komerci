@@ -1,7 +1,7 @@
 <?php
 namespace EuMatheusGomes\Komerci\Method;
 
-abstract class AbstractKomerciMethod
+abstract class AbstractMethod
 {
     protected $_komerciClient;
 
