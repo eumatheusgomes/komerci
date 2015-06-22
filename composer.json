@@ -1,0 +1,46 @@
+{
+    "name": "eumatheusgomes/komerci",
+    "description": "A PHP client for Rede's Komerci payment webservice",
+    "keywords": [
+        "komerci",
+        "rede",
+        "redecard",
+        "payment",
+        "webservice"
+    ],
+    "homepage": "https://github.com/eumatheusgomes/komerci",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Matheus Gomes",
+            "email": "eu@matheusgomes.com.br",
+            "homepage": "https://github.com/eumatheusgomes",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php" : ">=5.3.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit" : "4.*",
+        "scrutinizer/ocular": "~1.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "EuMatheusGomes\\Komerci\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "EuMatheusGomes\\Komerci\\Test\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "phpunit"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}
