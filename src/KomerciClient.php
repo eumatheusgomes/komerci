@@ -23,8 +23,8 @@ class KomerciClient
     public function __construct(
         $mode = 'dev',
         $filiacao = '999999999',
-        $usr = 'usr',
-        $pwd = 'pwd'
+        $usr = 'testews',
+        $pwd = 'testews'
     ) {
         $this->mode = $mode;
         $this->filiacao = $filiacao;
