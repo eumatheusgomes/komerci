@@ -1,6 +1,7 @@
 {
     "name": "eumatheusgomes/komerci",
     "description": "A PHP client for Rede's Komerci payment webservice",
+    "type": "library",
     "keywords": [
         "komerci",
         "rede",
