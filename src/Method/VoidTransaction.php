@@ -15,9 +15,11 @@ class VoidTransaction extends AbstractMethod
         'Pwd' => ''
     ];
 
-    public function __construct(\EuMatheusGomes\Komerci\KomerciClient $komerciClient)
-    {
-        parent::__construct($komerciClient);
+    public function __construct(
+        \EuMatheusGomes\Komerci\KomerciClient $komerciClient,
+        \SoapClient $soapClient
+    ) {
+        parent::__construct($komerciClient, $soapClient);
 
         $this->method = 'VoidTransaction';
         $this->resultNodeName = 'VoidTransactionResult';

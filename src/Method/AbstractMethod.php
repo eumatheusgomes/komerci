@@ -4,26 +4,28 @@ namespace EuMatheusGomes\Komerci\Method;
 abstract class AbstractMethod
 {
     protected $_komerciClient;
+    protected $_soapClient;
 
     protected $options;
     protected $method;
     protected $resultNodeName;
 
-    public function __construct(\EuMatheusGomes\Komerci\KomerciClient $komerciClient)
-    {
+    public function __construct(
+        \EuMatheusGomes\Komerci\KomerciClient $komerciClient,
+        \SoapClient $soapClient
+    ) {
         $this->_komerciClient = $komerciClient;
+        $this->_soapClient = $soapClient;
     }
 
     public function call()
     {
-        $soapClient = new \SoapClient($this->_komerciClient->getUrl());
-
         if ($this->_komerciClient->getMode() == 'dev') {
             $this->method .= 'Tst';
             $this->resultNodeName = str_replace('Result', 'TstResult', $this->resultNodeName);
         }
 
-        $response = $soapClient->{$this->method}($this->options);
+        $response = $this->_soapClient->{$this->method}($this->options);
         return simplexml_load_string($response->{$this->resultNodeName}->any);
     }
 

@@ -33,9 +33,11 @@ class GetAuthorized extends AbstractMethod
         'AddData'      => ''
     ];
 
-    public function __construct(\EuMatheusGomes\Komerci\KomerciClient $komerciClient)
-    {
-        parent::__construct($komerciClient);
+    public function __construct(
+        \EuMatheusGomes\Komerci\KomerciClient $komerciClient,
+        \SoapClient $soapClient
+    ) {
+        parent::__construct($komerciClient, $soapClient);
 
         $this->method = 'GetAuthorized';
         $this->resultNodeName = 'GetAuthorizedResult';
