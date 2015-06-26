@@ -32,17 +32,17 @@ abstract class AbstractMethod
     public function __call($method, $args)
     {
         if (strpos($method, 'set') === false) {
-            throw new Exception('Invalid method name: ' . $method);
+            throw new \BadMethodCallException('Invalid method name: ' . $method);
         }
 
         $attr = str_replace('set', '', $method);
 
         if (!in_array($attr, array_keys($this->options))) {
-            throw new Exception('Invalid attribute name: ' . $attr);
+            throw new \BadMethodCallException('Invalid attribute name: ' . $attr);
         }
 
-        if (!is_array($args)) {
-            throw new Exception('Missing method arguments.');
+        if (!is_array($args) || count($args) == 0) {
+            throw new \InvalidArgumentException('Missing method arguments: ' . $method);
         }
 
         $this->options[$attr] = $args[0];
