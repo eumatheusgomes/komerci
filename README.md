@@ -16,7 +16,7 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 ## Security
 
-If you discover any security related issues, please email :author_email instead of using the issue tracker.
+If you discover any security related issues, please email [eu@matheusgomes.com.br](eu@matheusgomes.com.br) instead of using the issue tracker.
 
 ## Credits
 
