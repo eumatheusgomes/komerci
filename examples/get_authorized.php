@@ -78,7 +78,7 @@ object(<?= get_class($response) ?>)
 }
 
 // $approved
-<?= true ? 'true' : 'false' ?>
+<?= $approved ? 'true' : 'false' ?>
 </pre>
         </div>
       </div>
