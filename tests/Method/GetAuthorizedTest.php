@@ -7,14 +7,20 @@ use EuMatheusGomes\Komerci\Test\Stub\SoapClientStub;
 
 class GetAuthorizedTest extends \PHPUnit_Framework_TestCase
 {
-    protected $getAuthorized;
+    protected $_komerciClient;
+    protected $_soapClientMock;
 
     protected function setUp()
     {
-        $komerciClient = new KomerciClient();
-        $soapClientStub = new SoapClientStub($komerciClient->getUrl());
+        $this->_komerciClient = new KomerciClient();
 
-        $this->getAuthorized = new GetAuthorized($komerciClient, $soapClientStub);
+        $this->_soapClientMock = $this->getMockBuilder('SoapClient')
+            ->disableOriginalConstructor()
+            ->setMethods(array('GetAuthorized', 'GetAuthorizedTst'))
+            ->getMock();
+
+        // $soapClientMock->expects($this->once())
+        //     ->method('GetAuthorized');
     }
 
     /**
@@ -22,7 +28,8 @@ class GetAuthorizedTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidSetterMethod()
     {
-        $this->getAuthorized->invalidMethodName();
+        $getAuthorized = new GetAuthorized($this->_komerciClient, $this->_soapClientMock);
+        $getAuthorized->invalidMethodName();
     }
 
     /**
@@ -30,7 +37,8 @@ class GetAuthorizedTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidAttributeNameForSetterMethod()
     {
-        $this->getAuthorized->setInvalidAttr();
+        $getAuthorized = new GetAuthorized($this->_komerciClient, $this->_soapClientMock);
+        $getAuthorized->setInvalidAttr();
     }
 
     /**
@@ -39,7 +47,8 @@ class GetAuthorizedTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetterMethodWithoutArgs($validAttrName)
     {
-        $this->getAuthorized->{"set{$validAttrName}"}();
+        $getAuthorized = new GetAuthorized($this->_komerciClient, $this->_soapClientMock);
+        $getAuthorized->{"set{$validAttrName}"}();
     }
 
     /**
@@ -47,30 +56,97 @@ class GetAuthorizedTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetterMethodReturnSelf($validAttrName)
     {
+        $getAuthorized = new GetAuthorized($this->_komerciClient, $this->_soapClientMock);
+
         $this->assertSame(
-            $this->getAuthorized ,
-            $this->getAuthorized->{"set{$validAttrName}"}('any value')
+            $getAuthorized,
+            $getAuthorized->{"set{$validAttrName}"}('any value')
         );
-    }
-
-    public function testReturnsSimpleXMLElement()
-    {
-    }
-
-    public function testGetAuthorizedCallInProdMode()
-    {
     }
 
     public function testGetAuthorizedTstCallInDevMode()
     {
+        $response = new \StdClass;
+        $response->GetAuthorizedTstResult = new \StdClass;
+        $response->GetAuthorizedTstResult->any = '<any_valid_xml></any_valid_xml>';
+
+        $this->_soapClientMock->expects($this->once())
+            ->method('GetAuthorizedTst')
+            ->will($this->returnValue($response));
+
+        $getAuthorized = new GetAuthorized($this->_komerciClient, $this->_soapClientMock);
+        $getAuthorized->call();
+    }
+
+    public function testGetAuthorizedCallInProdMode()
+    {
+        $response = new \StdClass;
+        $response->GetAuthorizedResult = new \StdClass;
+        $response->GetAuthorizedResult->any = '<any_valid_xml></any_valid_xml>';
+
+        $this->_soapClientMock->expects($this->once())
+            ->method('GetAuthorized')
+            ->will($this->returnValue($response));
+
+        $komerciClient = new KomerciClient('prod');
+        $getAuthorized = new GetAuthorized($komerciClient, $this->_soapClientMock);
+
+        $getAuthorized->call();
+    }
+
+    public function testReturnsSimpleXMLElement()
+    {
+        $response = new \StdClass;
+        $response->GetAuthorizedTstResult = new \StdClass;
+        $response->GetAuthorizedTstResult->any = '<any_valid_xml></any_valid_xml>';
+
+        $this->_soapClientMock->expects($this->once())
+            ->method('GetAuthorizedTst')
+            ->will($this->returnValue($response));
+
+        $getAuthorized = new GetAuthorized($this->_komerciClient, $this->_soapClientMock);
+
+        $this->assertEquals('SimpleXMLElement', get_class($getAuthorized->call()));
     }
 
     public function testApprovedMethodResponse()
     {
+        $zero = 0;
+        $notEmptyString = 'not empty string';
+        $responseXml = "<AUTHORIZATION><CODRET>{$zero}</CODRET><NUMCV>{$notEmptyString}</NUMCV></AUTHORIZATION>";
+
+        $response = new \StdClass;
+        $response->GetAuthorizedTstResult = new \StdClass;
+        $response->GetAuthorizedTstResult->any = $responseXml;
+
+        $this->_soapClientMock->expects($this->once())
+            ->method('GetAuthorizedTst')
+            ->will($this->returnValue($response));
+
+        $getAuthorized = new GetAuthorized($this->_komerciClient, $this->_soapClientMock);
+        $response = $getAuthorized->call();
+
+        $this->assertTrue($getAuthorized->approved($response));
     }
 
     public function testNotApprovedMethodResponse()
     {
+        $notZero = rand(1, 99);
+        $emptyString = '';
+        $responseXml = "<AUTHORIZATION><CODRET>{$notZero}</CODRET><NUMCV>{$emptyString}</NUMCV></AUTHORIZATION>";
+
+        $response = new \StdClass;
+        $response->GetAuthorizedTstResult = new \StdClass;
+        $response->GetAuthorizedTstResult->any = $responseXml;
+
+        $this->_soapClientMock->expects($this->once())
+            ->method('GetAuthorizedTst')
+            ->will($this->returnValue($response));
+
+        $getAuthorized = new GetAuthorized($this->_komerciClient, $this->_soapClientMock);
+        $response = $getAuthorized->call();
+
+        $this->assertFalse($getAuthorized->approved($response));
     }
 
     public function validAttrNameProvider()
