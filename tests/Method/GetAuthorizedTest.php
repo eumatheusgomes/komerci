@@ -3,7 +3,6 @@ namespace EuMatheusGomes\Komerci\Test\Method;
 
 use EuMatheusGomes\Komerci\KomerciClient;
 use EuMatheusGomes\Komerci\Method\GetAuthorized;
-use EuMatheusGomes\Komerci\Test\Stub\SoapClientStub;
 
 class GetAuthorizedTest extends \PHPUnit_Framework_TestCase
 {
@@ -18,9 +17,6 @@ class GetAuthorizedTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(array('GetAuthorized', 'GetAuthorizedTst'))
             ->getMock();
-
-        // $soapClientMock->expects($this->once())
-        //     ->method('GetAuthorized');
     }
 
     /**
