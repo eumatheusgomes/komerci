@@ -31,7 +31,7 @@ class VoidTransaction extends AbstractMethod
 
     public function approved($response)
     {
-        if ((int) $resposta->codret === 0) {
+        if (trim($response->codret) !== '' && (int) $response->codret === 0) {
             return true;
         }
 
