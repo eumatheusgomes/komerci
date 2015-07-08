@@ -26,7 +26,13 @@ abstract class AbstractMethod
         }
 
         $response = $this->_soapClient->{$this->method}($this->options);
-        return simplexml_load_string($response->{$this->resultNodeName}->any);
+        $xml = simplexml_load_string($response->{$this->resultNodeName}->any);
+
+        if (property_exists($xml, 'root')) {
+            $xml = $xml->root;
+        }
+
+        return $xml;
     }
 
     public function __call($method, $args)
